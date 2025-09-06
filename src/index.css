@@ -2,95 +2,151 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* HerbTrace Design System - Nature-inspired theme with glassmorphism
+All colors MUST be HSL for semantic tokens.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base colors - Soft, natural palette */
+    --background: 147 20% 97%;
+    --foreground: 158 64% 12%;
 
+    /* Card system with glassmorphism */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 158 64% 12%;
+    --card-glass: 147 50% 95%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 158 64% 12%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Emerald green for nature theme */
+    --primary: 158 64% 52%;
+    --primary-foreground: 0 0% 98%;
+    --primary-light: 158 55% 65%;
+    --primary-dark: 158 64% 42%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Sage green */
+    --secondary: 147 25% 88%;
+    --secondary-foreground: 158 64% 22%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted - Soft gray-greens */
+    --muted: 147 20% 94%;
+    --muted-foreground: 158 25% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - Bright emerald */
+    --accent: 158 84% 60%;
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Success - Natural green */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Warning - Amber */
+    --warning: 45 93% 47%;
+    --warning-foreground: 0 0% 98%;
 
-    --radius: 0.5rem;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --sidebar-background: 0 0% 98%;
+    /* Borders and inputs - Subtle green tints */
+    --border: 147 25% 85%;
+    --input: 147 25% 90%;
+    --ring: 158 64% 52%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --radius: 1rem;
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* Glassmorphism variables */
+    --glass-bg: 147 50% 95% / 0.8;
+    --glass-border: 147 25% 85% / 0.3;
+    --glass-shadow: 158 25% 25% / 0.1;
 
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(158 64% 52%), hsl(158 84% 60%));
+    --gradient-secondary: linear-gradient(135deg, hsl(147 25% 88%), hsl(147 50% 95%));
+    --gradient-glass: linear-gradient(135deg, hsl(147 50% 95% / 0.8), hsl(0 0% 100% / 0.6));
+    --gradient-hero: linear-gradient(135deg, hsl(158 64% 52%), hsl(142 76% 36%));
+
+    /* Shadows for depth */
+    --shadow-glass: 0 8px 32px hsl(158 25% 25% / 0.1);
+    --shadow-card: 0 4px 20px hsl(158 25% 25% / 0.08);
+    --shadow-hover: 0 8px 30px hsl(158 25% 25% / 0.15);
+
+    /* Sidebar colors - Updated for nature theme */
+    --sidebar-background: 147 25% 96%;
+    --sidebar-foreground: 158 64% 22%;
+    --sidebar-primary: 158 64% 52%;
     --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 147 25% 88%;
+    --sidebar-accent-foreground: 158 64% 22%;
+    --sidebar-border: 147 25% 85%;
+    --sidebar-ring: 158 64% 52%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark theme with nature undertones */
+    --background: 158 64% 8%;
+    --foreground: 147 25% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 158 64% 10%;
+    --card-foreground: 147 25% 95%;
+    --card-glass: 158 50% 15%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 158 64% 10%;
+    --popover-foreground: 147 25% 95%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 158 84% 60%;
+    --primary-foreground: 158 64% 8%;
+    --primary-light: 158 75% 70%;
+    --primary-dark: 158 84% 50%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 158 25% 20%;
+    --secondary-foreground: 147 25% 85%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 158 25% 15%;
+    --muted-foreground: 147 15% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 158 84% 70%;
+    --accent-foreground: 158 64% 8%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --success: 142 76% 46%;
+    --success-foreground: 158 64% 8%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --warning: 45 93% 57%;
+    --warning-foreground: 158 64% 8%;
+
+    --destructive: 0 84% 70%;
+    --destructive-foreground: 158 64% 8%;
+
+    --border: 158 25% 25%;
+    --input: 158 25% 20%;
+    --ring: 158 84% 60%;
+
+    /* Dark glassmorphism */
+    --glass-bg: 158 50% 15% / 0.8;
+    --glass-border: 158 25% 25% / 0.3;
+    --glass-shadow: 158 25% 5% / 0.3;
+
+    /* Dark gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(158 84% 60%), hsl(158 84% 70%));
+    --gradient-secondary: linear-gradient(135deg, hsl(158 25% 20%), hsl(158 50% 15%));
+    --gradient-glass: linear-gradient(135deg, hsl(158 50% 15% / 0.8), hsl(158 64% 10% / 0.6));
+    --gradient-hero: linear-gradient(135deg, hsl(158 84% 60%), hsl(142 76% 46%));
+
+    /* Dark shadows */
+    --shadow-glass: 0 8px 32px hsl(158 25% 5% / 0.3);
+    --shadow-card: 0 4px 20px hsl(158 25% 5% / 0.2);
+    --shadow-hover: 0 8px 30px hsl(158 25% 5% / 0.4);
+
+    /* Dark sidebar */
+    --sidebar-background: 158 64% 8%;
+    --sidebar-foreground: 147 25% 85%;
+    --sidebar-primary: 158 84% 60%;
+    --sidebar-primary-foreground: 158 64% 8%;
+    --sidebar-accent: 158 25% 20%;
+    --sidebar-accent-foreground: 147 25% 85%;
+    --sidebar-border: 158 25% 25%;
+    --sidebar-ring: 158 84% 60%;
   }
 }
 
@@ -101,5 +157,109 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* HerbTrace Component Styles */
+@layer components {
+  /* Glassmorphism card */
+  .glass-card {
+    @apply bg-gradient-to-br from-white/80 to-white/40 backdrop-blur-xl border border-white/30;
+    box-shadow: var(--shadow-glass);
+  }
+
+  .glass-card-dark {
+    @apply bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20;
+  }
+
+  /* Hero gradients */
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  /* Interactive elements */
+  .hover-lift {
+    @apply transition-all duration-300 hover:shadow-[var(--shadow-hover)] hover:-translate-y-1;
+  }
+
+  /* Loading animations */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+
+  /* Timeline styles */
+  .timeline-line {
+    @apply absolute left-6 top-0 h-full w-0.5 bg-gradient-to-b from-primary to-primary/20;
+  }
+
+  .timeline-dot {
+    @apply relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg;
+  }
+}
+
+@layer utilities {
+  /* Custom animations */
+  @keyframes pulse-glow {
+    from {
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+    }
+    to {
+      box-shadow: 0 0 30px hsl(var(--primary) / 0.6);
+    }
+  }
+
+  @keyframes slide-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in-scale {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Animation classes */
+  .animate-slide-up {
+    animation: slide-in-up 0.5s ease-out;
+  }
+
+  .animate-fade-scale {
+    animation: fade-in-scale 0.3s ease-out;
+  }
+
+  /* Glass background utilities */
+  .bg-glass {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(16px);
+    border: 1px solid hsl(var(--glass-border));
+  }
+
+  /* Shadow utilities */
+  .shadow-glass {
+    box-shadow: var(--shadow-glass);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-hover {
+    box-shadow: var(--shadow-hover);
   }
 }
