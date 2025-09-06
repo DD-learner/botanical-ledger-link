@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from "react";
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Search, Package, MapPin, Clock, QrCode } from 'lucide-react';
 import QRCode from 'qrcode';
@@ -13,16 +14,26 @@ import { toast } from '@/hooks/use-toast';
 
 interface CustomerPanelProps {
   contract: any;
+  initialBatchId?: string;
 }
 
-export function CustomerPanel({ contract }: CustomerPanelProps) {
-  const [batchId, setBatchId] = useState('');
-  const [batchData, setBatchData] = useState(null);
-  const [qrCodeUrl, setQrCodeUrl] = useState('');
+export const CustomerPanel = ({ contract, initialBatchId }: CustomerPanelProps) => {
+  const [batchId, setBatchId] = useState(initialBatchId || "");
+  const [batchData, setBatchData] = useState<any>(null);
+  const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSearch = async () => {
-    if (!batchId.trim()) {
+  // Auto-search when initialBatchId changes
+  React.useEffect(() => {
+    if (initialBatchId && initialBatchId !== batchId) {
+      setBatchId(initialBatchId);
+      handleSearch(initialBatchId);
+    }
+  }, [initialBatchId]);
+
+  const handleSearch = async (searchBatchId?: string) => {
+    const idToSearch = searchBatchId || batchId;
+    if (!idToSearch.trim()) {
       toast({
         title: "Batch ID Required",
         description: "Please enter a batch ID to search",
@@ -36,23 +47,23 @@ export function CustomerPanel({ contract }: CustomerPanelProps) {
     try {
       // For demo purposes, use sample data
       // In production, this would query the smart contract
-      if (sampleBatchData[batchId]) {
-        setBatchData(sampleBatchData[batchId]);
+      if (sampleBatchData[idToSearch]) {
+        setBatchData(sampleBatchData[idToSearch]);
         
         // Generate QR code
-        const qrUrl = await QRCode.toDataURL(`HerbTrace:${batchId}`);
+        const qrUrl = await QRCode.toDataURL(`HerbTrace:${idToSearch}`);
         setQrCodeUrl(qrUrl);
         
         toast({
           title: "Batch Found!",
-          description: `Successfully loaded data for ${batchId}`,
+          description: `Successfully loaded data for ${idToSearch}`,
         });
       } else {
         setBatchData(null);
         setQrCodeUrl('');
         toast({
           title: "Batch Not Found",
-          description: `No data found for batch ID: ${batchId}`,
+          description: `No data found for batch ID: ${idToSearch}`,
           variant: "destructive",
         });
       }
@@ -157,7 +168,7 @@ export function CustomerPanel({ contract }: CustomerPanelProps) {
             </Field>
           </div>
           <Button
-            onClick={handleSearch}
+            onClick={() => handleSearch()}
             disabled={loading}
             className="h-12 px-8 gradient-hero text-white self-end"
           >
