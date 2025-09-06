@@ -3,10 +3,10 @@
 
 export const config = {
   // Contract Configuration
-  CONTRACT_ADDRESS: process.env.VITE_CONTRACT_ADDRESS || "0x742d35Cc6634C0532925a3b8D45Bf124e4394b8E",
+  CONTRACT_ADDRESS: import.meta.env.VITE_CONTRACT_ADDRESS || "0x742d35Cc6634C0532925a3b8D45Bf124e4394b8E",
   
   // Network Configuration
-  CHAIN_ID: process.env.VITE_CHAIN_ID || "11155111", // Sepolia testnet
+  CHAIN_ID: import.meta.env.VITE_CHAIN_ID || "11155111", // Sepolia testnet
   CHAIN_NAME: "Sepolia",
   RPC_URL: "https://sepolia.infura.io/v3/YOUR_INFURA_KEY",
   
