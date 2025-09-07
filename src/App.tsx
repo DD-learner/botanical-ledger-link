@@ -27,7 +27,8 @@ const AppContent = () => {
     return <Auth />;
   }
 
-  if (profile?.role === 'admin') {
+  const metadataRole = (user?.user_metadata as any)?.role as string | undefined;
+  if (profile?.role === 'admin' || metadataRole === 'admin') {
     return <AdminDashboard />;
   }
 

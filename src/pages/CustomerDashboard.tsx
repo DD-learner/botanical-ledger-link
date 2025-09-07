@@ -4,13 +4,11 @@ import { CustomerPanel } from '@/components/CustomerPanel';
 import { QRScanner } from '@/components/QRScanner';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/Card';
-import { Field } from '@/components/ui/Field';
-import { Leaf, QrCode, LogOut, Search, User } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Leaf, QrCode, LogOut } from 'lucide-react';
+import { AccountHover } from '@/components/ui/AccountHover';
 
 export const CustomerDashboard = () => {
-  const { profile, signOut } = useAuth();
+  const { profile, user, signOut } = useAuth();
   const [batchId, setBatchId] = useState('');
   const [showScanner, setShowScanner] = useState(false);
   const [contract] = useState(null); // Mock contract for now
@@ -21,9 +19,7 @@ export const CustomerDashboard = () => {
   };
 
   const handleSearch = () => {
-    if (batchId.trim()) {
-      // The CustomerPanel will handle the search with the provided batchId
-    }
+    // Manual search removed; using QR scan only
   };
 
   return (
@@ -47,11 +43,23 @@ export const CustomerDashboard = () => {
             </div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 text-sm">
-              <User className="w-4 h-4 text-muted-foreground" />
-              <span className="text-foreground">{profile?.full_name || profile?.email}</span>
-            </div>
+          <div className="flex items-center gap-2 sm:gap-4">
+            {(() => {
+              const email = profile?.email || user?.email || null;
+              const name = profile?.full_name || (user?.user_metadata as any)?.full_name || email || null;
+              const role = profile?.role || (user?.user_metadata as any)?.role || null;
+              return (
+                <AccountHover
+                  name={name}
+                  email={email}
+                  role={role}
+                  userId={profile?.user_id || user?.id || null}
+                  createdAt={profile?.created_at || (user as any)?.created_at || null}
+                  updatedAt={profile?.updated_at || (user as any)?.updated_at || null}
+                  lastSignInAt={user?.last_sign_in_at ?? null}
+                />
+              );
+            })()}
             <Button
               variant="ghost"
               size="sm"
@@ -66,49 +74,6 @@ export const CustomerDashboard = () => {
       </motion.header>
 
       <div className="container mx-auto px-4 py-8 relative z-10">
-        {/* Search Section */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.1 }}
-          className="mb-8"
-        >
-          <Card className="p-6 bg-card/90 backdrop-blur-sm border-0 shadow-xl">
-            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
-              <div className="flex-1">
-                <Field label="Batch ID">
-                  <div className="relative">
-                    <Input
-                      value={batchId}
-                      onChange={(e) => setBatchId(e.target.value)}
-                      placeholder="Enter batch ID or scan QR code"
-                      className="pl-10"
-                    />
-                    <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground pointer-events-none" />
-                  </div>
-                </Field>
-              </div>
-              <div className="flex gap-2 w-full sm:w-auto">
-                <Button
-                  onClick={() => setShowScanner(true)}
-                  variant="outline"
-                  className="flex-1 sm:flex-none flex items-center gap-2"
-                >
-                  <QrCode className="w-4 h-4" />
-                  Scan QR
-                </Button>
-                <Button
-                  onClick={handleSearch}
-                  disabled={!batchId.trim()}
-                  className="flex-1 sm:flex-none"
-                >
-                  Search
-                </Button>
-              </div>
-            </div>
-          </Card>
-        </motion.div>
-
         {/* Customer Panel */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
@@ -116,6 +81,23 @@ export const CustomerDashboard = () => {
           transition={{ delay: 0.2 }}
         >
           <CustomerPanel contract={contract} initialBatchId={batchId} />
+        </motion.div>
+
+        {/* QR Scan Section moved down */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.25 }}
+          className="mt-8 flex items-center justify-center"
+        >
+          <Button
+            onClick={() => setShowScanner(true)}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <QrCode className="w-4 h-4" />
+            Scan Batch QR
+          </Button>
         </motion.div>
       </div>
 

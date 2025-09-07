@@ -35,11 +35,15 @@ export const Auth = () => {
           toast.success('Successfully signed in!');
         }
       } else {
-        const { error } = await signUp(email, password, fullName, role);
+        const { error, needsConfirmation } = await signUp(email, password, fullName, role);
         if (error) {
-          toast.error(error.message);
+          toast.error(error.message || 'Failed to create account. Please try again.');
         } else {
-          toast.success('Successfully signed up! Please check your email to confirm your account.');
+          if (needsConfirmation) {
+            toast.success('Account created! Please check your email to confirm your account.');
+          } else {
+            toast.success('Successfully signed up!');
+          }
         }
       }
     } catch (error) {

@@ -38,6 +38,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const syncRoleFromMetadata = async (authUser: User) => {
+    try {
+      const metadataRole = (authUser.user_metadata as any)?.role as string | undefined;
+      if (metadataRole === 'admin') {
+        // Only update if profile exists and isn't already admin
+        if (profile?.role !== 'admin') {
+          const { error } = await supabase
+            .from('profiles')
+            .update({ role: 'admin' })
+            .eq('user_id', authUser.id);
+          if (!error) {
+            await fetchProfile(authUser.id);
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Error syncing role from metadata:', e);
+    }
+  };
+
   const fetchProfile = async (userId: string) => {
     try {
       const { data, error } = await supabase
@@ -63,6 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         if (session?.user) {
           await fetchProfile(session.user.id);
+          await syncRoleFromMetadata(session.user);
         } else {
           setProfile(null);
         }
@@ -71,11 +92,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     );
 
     // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        fetchProfile(session.user.id);
+        await fetchProfile(session.user.id);
+        await syncRoleFromMetadata(session.user);
+        setLoading(false);
       } else {
         setLoading(false);
       }
@@ -93,20 +116,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signUp = async (email: string, password: string, fullName?: string, role = 'customer') => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          full_name: fullName,
-          role: role,
+    try {
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            full_name: fullName,
+            role: role,
+          },
         },
-      },
-    });
-    return { error };
+      });
+
+      if (error) {
+        console.error('Signup error:', error);
+        return { error };
+      }
+
+      // If signup is successful but user needs email confirmation
+      if (data.user && !data.session) {
+        console.log('User created, email confirmation required');
+        return { error: null, needsConfirmation: true };
+      }
+
+      return { error: null };
+    } catch (err) {
+      console.error('Unexpected signup error:', err);
+      return { 
+        error: { 
+          message: 'An unexpected error occurred during signup. Please try again.' 
+        } 
+      };
+    }
   };
 
   const signOut = async () => {
